@@ -1,7 +1,7 @@
 # astropicdaily
 Bot that uploads the Astronomy Picture of the Day.
-[Follow astropicdaily on X (Twitter)](https://x.com/astropicdaily)
-[Follow astropicdaily on Bluesky](https://bsky.app/profile/astropicdaily.bsky.social)
+
+Follow astropicdaily on: [X (Twitter)](https://x.com/astropicdaily) and [Bluesky](https://bsky.app/profile/astropicdaily.bsky.social)
 
 ## Run Locally
 
