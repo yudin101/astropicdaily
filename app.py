@@ -24,7 +24,7 @@ data = response.json()
 
 image_date = data['date']
 image_title = data['title']
-learn_more_text = "Source: https://apod.nasa.gov/apod/astropix.html"
+learn_more_text = "Source: apod.nasa.gov/apod/astropix.html"
 
 
 try:
