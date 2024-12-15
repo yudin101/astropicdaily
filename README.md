@@ -1,6 +1,7 @@
 # astropicdaily
-An X (Twitter) bot that uploads the astronomical picture of the day.
-[Follow astropicdaily](x.com/astropicdaily)
+Bot that uploads the Astronomy Picture of the Day.
+[Follow astropicdaily on X (Twitter)](https://x.com/astropicdaily)
+[Follow astropicdaily on Bluesky](https://bsky.app/profile/astropicdaily.bsky.social)
 
 ## Run Locally
 
@@ -31,8 +32,10 @@ echo "API_SECRET = 'your_api_secret_here'" >> keys.py
 echo "ACCESS_TOKEN = 'your_access_token_here'" >> keys.py
 echo "ACCESS_TOKEN_SECRET = 'your_access_token_secret_here'" >> keys.py
 echo "APOD_KEY = 'your_apod_key_here'" >> keys.py
+echo "BSKY_USERNAME = 'your_bluesky_username'" >> keys.py
+echo "BSKY_PASSWORD = 'your_bluesky_password'" >> keys.py
 ```
-*All the above keys can be created from [X Developer Portal](https://developer.x.com/en) except for the last one. APOD_KEY can be created from [NASA Open APIs](https://api.nasa.gov/).*
+*X (Twitter) related keys can be generated from [X Developer Portal](https://developer.x.com/en). APOD_KEY can be created from [NASA Open APIs](https://api.nasa.gov/).*
 
 **Run the script**
 
@@ -54,4 +57,4 @@ Thank you for your interest in contributing!
 
 ## License
 
-This project is licensed under the [MIT License](https://github.com/Yudin101/astropicdaily/blob/main/LICENSE).
+This project is licensed under the [MIT License](https://github.com/yudin101/astropicdaily/blob/main/LICENSE).
