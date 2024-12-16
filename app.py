@@ -17,6 +17,7 @@ clientb = atproto.Client()
 clientb.login(keys.BSKY_USERNAME, keys.BSKY_PASSWORD)
 
 
+
 # APOD API Fetch
 url = f"https://api.nasa.gov/planetary/apod?api_key={keys.APOD_KEY}"
 response = requests.get(url)
@@ -24,7 +25,6 @@ data = response.json()
 
 image_date = data['date']
 image_title = data['title']
-learn_more_text = "Source: apod.nasa.gov/apod/astropix.html"
 
 
 try:
@@ -40,17 +40,17 @@ try:
         # Uploading the image to API
         twitter_image_bytes.seek(0)
         media = api.media_upload(filename=f"{image_date}-apod.jpg", file=twitter_image_bytes)
-        
+
         # Creating the tweet along with the image
         response = clientx.create_tweet(text=image_title, media_ids=[media.media_id])
         latest_tweet_id = response.data["id"]
 
         # Replying to the last tweet
         response = clientx.create_tweet(
-            text = learn_more_text,
+            text = "Source: apod.nasa.gov/apod/astropix.html",
             in_reply_to_tweet_id = latest_tweet_id
         )
-        
+
 
         # Post on Bluesky
 
@@ -66,7 +66,7 @@ try:
 
         # Replying to the last post
         clientb.send_post(
-            text = learn_more_text,
+            text = atproto.client_utils.TextBuilder().text('Source: ').link('apod.nasa.gov/apod/astropix.html', 'https://apod.nasa.gov/apod/astropix.html'),
             reply_to = atproto.models.AppBskyFeedPost.ReplyRef(parent = root_post_ref, root = root_post_ref)
         )
 
