@@ -31,13 +31,15 @@ try:
     img_response = requests.get(data['url'])
 
     if img_response.status_code == 200:
-        image_bytes = io.BytesIO(img_response.content)
+        twitter_image_bytes = io.BytesIO(img_response.content)
+        bsky_image_bytes = io.BytesIO(img_response.content)
 
-        
+
         # Post on X
 
         # Uploading the image to API
-        media = api.media_upload(filename=f"{image_date}-apod.jpg", file=image_bytes)
+        twitter_image_bytes.seek(0)
+        media = api.media_upload(filename=f"{image_date}-apod.jpg", file=twitter_image_bytes)
         
         # Creating the tweet along with the image
         response = clientx.create_tweet(text=image_title, media_ids=[media.media_id])
@@ -53,10 +55,11 @@ try:
         # Post on Bluesky
 
         # Creating the post and also setting a reference
+        bsky_image_bytes.seek(0)
         root_post_ref = atproto.models.create_strong_ref(
             clientb.send_image(
                 text = image_title,
-                image = image_bytes,
+                image = bsky_image_bytes.read(),
                 image_alt = f"Astronomy Picture of the Day: {image_title}",
             )
         )
