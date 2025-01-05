@@ -23,55 +23,66 @@ url = f"https://api.nasa.gov/planetary/apod?api_key={keys.APOD_KEY}"
 response = requests.get(url)
 data = response.json()
 
-image_date = data['date']
-image_title = data['title']
-
+response_data = data['date']
+response_title = data['title']
+media_type = data['media_type']
+media_url = data['url']
 
 try:
-    img_response = requests.get(data['url'])
+    if media_type == 'video':
 
-    if img_response.status_code == 200:
-        twitter_image_bytes = io.BytesIO(img_response.content)
-        bsky_image_bytes = io.BytesIO(img_response.content)
-
-
-        # Post on X
-
-        # Uploading the image to API
-        twitter_image_bytes.seek(0)
-        media = api.media_upload(filename=f"{image_date}-apod.jpg", file=twitter_image_bytes)
-
-        # Creating the tweet along with the image
-        response = clientx.create_tweet(text=image_title, media_ids=[media.media_id])
+        # Creating a tweet 
+        response = clientx.create_tweet(text=f"{response_title}\nURL: {media_url}")
         latest_tweet_id = response.data["id"]
 
-        # Replying to the last tweet
-        response = clientx.create_tweet(
-            text = "Source: apod.nasa.gov/apod/astropix.html",
-            in_reply_to_tweet_id = latest_tweet_id
-        )
-
-
-        # Post on Bluesky
-
-        # Creating the post and also setting a reference
-        bsky_image_bytes.seek(0)
+        # Crreating a post
         root_post_ref = atproto.models.create_strong_ref(
-            clientb.send_image(
-                text = image_title,
-                image = bsky_image_bytes.read(),
-                image_alt = f"Astronomy Picture of the Day: {image_title}",
+            clientb.send_post(
+                text = atproto.client_utils.TextBuilder().text(f"{response_title}\nURL: ").link(media_url, media_url),
             )
         )
 
-        # Replying to the last post
-        clientb.send_post(
-            text = atproto.client_utils.TextBuilder().text('Source: ').link('apod.nasa.gov/apod/astropix.html', 'https://apod.nasa.gov/apod/astropix.html'),
-            reply_to = atproto.models.AppBskyFeedPost.ReplyRef(parent = root_post_ref, root = root_post_ref)
-        )
+    elif media_type == 'img':
+        img_response = requests.get(media_url)
 
-    else:
-        print(f"Failed to fetch image. Status code: {img_response.status_code}")
+        if img_response.status_code == 200:
+            twitter_image_bytes = io.BytesIO(img_response.content)
+            bsky_image_bytes = io.BytesIO(img_response.content)
+
+
+            # Uploading the image to the Twitter API
+            twitter_image_bytes.seek(0)
+            media = api.media_upload(filename=f"{response_data}-apod.jpg", file=twitter_image_bytes)
+
+            # Creating the tweet along with the image
+            response = clientx.create_tweet(text=response_title, media_ids=[media.media_id])
+            latest_tweet_id = response.data["id"]
+            
+
+
+            # Uploading the post along with the image (Bluesky)
+            bsky_image_bytes.seek(0)
+            root_post_ref = atproto.models.create_strong_ref(
+                clientb.send_image(
+                    text = response_title,
+                    image = bsky_image_bytes.read(),
+                    image_alt = f"Astronomy Picture of the Day: {response_title}",
+                )
+            )
+        else:
+            print(f"Failed to fetch image. Status code: {img_response.status_code}")
+
+    # Replying to the last tweet (Twitter)
+    response = clientx.create_tweet(
+        text = "Source: apod.nasa.gov/apod/astropix.html",
+        in_reply_to_tweet_id = latest_tweet_id
+    )
+
+    # Replying to the last post (Bluesky)
+    clientb.send_post(
+        text = atproto.client_utils.TextBuilder().text('Source: ').link('apod.nasa.gov/apod/astropix.html', 'https://apod.nasa.gov/apod/astropix.html'),
+        reply_to = atproto.models.AppBskyFeedPost.ReplyRef(parent = root_post_ref, root = root_post_ref)
+    )
 
     print("APOD posted successfully!")
 except Exception as e:
