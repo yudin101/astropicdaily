@@ -42,7 +42,7 @@ try:
             )
         )
 
-    elif media_type == 'img':
+    elif media_type == 'image':
         img_response = requests.get(media_url)
 
         if img_response.status_code == 200:
