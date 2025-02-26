@@ -32,16 +32,28 @@ data = response.json()
 
 response_data = data["date"]
 response_title = data["title"]
+response_desc = data["explanation"]
 media_type = data["media_type"]
 media_url = data["url"]
 
+
+def prune_description(limit, alt_text):
+    additional_text = "[MORE ON THE WEBSITE]"
+    max_len = limit - len(additional_text) - 1
+
+    if len(alt_text) > max_len:
+        return alt_text[:max_len].rstrip() + " " + additional_text
+    else:
+        return alt_text
+
+
 try:
     if media_type == "video":
-        # Creating a tweet
+        # Creating a tweet (Twitter)
         response = clientx.create_tweet(text=f"{response_title}\nURL: {media_url}")
         latest_tweet_id = response.data["id"]
 
-        # Crreating a post
+        # Crreating a post (Bluesky)
         root_post_ref = atproto.models.create_strong_ref(
             clientb.send_post(
                 text=atproto.client_utils.TextBuilder()
@@ -63,6 +75,13 @@ try:
                 filename=f"{response_data}-apod.jpg", file=twitter_image_bytes
             )
 
+            # Adding alt text in Twitter
+            alt_text_limit_twitter = 1000
+            media_metadata = api.create_media_metadata(
+                media_id=media.media_id,
+                alt_text=prune_description(alt_text_limit_twitter, response_desc),
+            )
+
             # Creating the tweet along with the image
             response = clientx.create_tweet(
                 text=response_title, media_ids=[media.media_id]
@@ -70,12 +89,13 @@ try:
             latest_tweet_id = response.data["id"]
 
             # Uploading the post along with the image (Bluesky)
+            alt_text_limit_bsky = 2000
             bsky_image_bytes.seek(0)
             root_post_ref = atproto.models.create_strong_ref(
                 clientb.send_image(
                     text=response_title,
                     image=bsky_image_bytes.read(),
-                    image_alt=f"Astronomy Picture of the Day: {response_title}",
+                    image_alt=prune_description(alt_text_limit_bsky, response_desc),
                 )
             )
         else:
