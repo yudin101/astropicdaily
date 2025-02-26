@@ -30,12 +30,6 @@ url = f"https://api.nasa.gov/planetary/apod?api_key={keys.APOD_KEY}"
 response = requests.get(url)
 data = response.json()
 
-response_data = data["date"]
-response_title = data["title"]
-response_desc = data["explanation"]
-media_type = data["media_type"]
-media_url = data["url"]
-
 
 def prune_description(limit, alt_text):
     additional_text = "[MORE ON THE WEBSITE]"
@@ -45,6 +39,19 @@ def prune_description(limit, alt_text):
         return alt_text[:max_len].rstrip() + " " + additional_text
     else:
         return alt_text
+
+
+def date_extract(date):
+    extract = date[2:4] + date[5:7] + date[8:]
+    return f"apod.nasa.gov/apod/ap{extract}.html"
+
+
+response_date = data["date"]
+response_title = data["title"]
+response_desc = data["explanation"]
+media_type = data["media_type"]
+media_url = data["url"]
+source_url = date_extract(response_date)
 
 
 try:
@@ -72,7 +79,7 @@ try:
             # Uploading the image to the Twitter API
             twitter_image_bytes.seek(0)
             media = api.media_upload(
-                filename=f"{response_data}-apod.jpg", file=twitter_image_bytes
+                filename=f"{response_date}-apod.jpg", file=twitter_image_bytes
             )
 
             # Adding alt text in Twitter
@@ -103,7 +110,7 @@ try:
 
     # Replying to the last tweet (Twitter)
     response = clientx.create_tweet(
-        text="Source: apod.nasa.gov/apod/astropix.html",
+        text=f"Source: {source_url}",
         in_reply_to_tweet_id=latest_tweet_id,
     )
 
@@ -112,8 +119,8 @@ try:
         text=atproto.client_utils.TextBuilder()
         .text("Source: ")
         .link(
-            "apod.nasa.gov/apod/astropix.html",
-            "https://apod.nasa.gov/apod/astropix.html",
+            f"{source_url}",
+            f"https://{source_url}",
         ),
         reply_to=atproto.models.AppBskyFeedPost.ReplyRef(
             parent=root_post_ref, root=root_post_ref
