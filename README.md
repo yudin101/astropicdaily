@@ -8,7 +8,7 @@ Follow astropicdaily on: [X (Twitter)](https://x.com/astropicdaily) and [Bluesky
 **Clone the project**
 
 ```bash
-git clone https://github.com/Yudin101/astropicdaily.git
+git clone https://github.com/yudin101/astropicdaily.git
 ```
 
 **Go to the project directory**
@@ -40,7 +40,7 @@ echo "BSKY_PASSWORD = 'your_bluesky_password'" >> keys.py
 **Run the script**
 
 ```bash
-python3 app.py
+python3 main.py
 ```
 
 ## Contributing
