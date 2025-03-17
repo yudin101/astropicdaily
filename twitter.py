@@ -25,7 +25,9 @@ def post_reply(latest_tweet_id, source_url):
     )
 
 
-def post_image(response_title, response_desc, image_bytes, source_url):
+def post_image(
+    response_title, response_desc, image_bytes, source_url, alt_text_twitter
+):
     print("\nCreating a tweet with image...")
     # Uploading the image to the Twitter API
     image_bytes.seek(0)
@@ -35,7 +37,7 @@ def post_image(response_title, response_desc, image_bytes, source_url):
     alt_text_limit_twitter = 1000
     media_metadata = api.create_media_metadata(
         media_id=media.media_id,
-        alt_text=prune_description(alt_text_limit_twitter, response_desc),
+        alt_text=alt_text_twitter,
     )
 
     # Creating the tweet along with the image

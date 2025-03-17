@@ -23,15 +23,17 @@ def post_reply(source_url, root_post_ref):
     )
 
 
-def post_image(response_title, response_desc, image_bytes, source_url):
+def post_image(
+    response_title, response_desc, image_bytes, source_url, alt_text_bluesky
+):
     print("\nCreating a post with image...")
     alt_text_limit_bsky = 2000
     image_bytes.seek(0)
     root_post_ref = atproto.models.create_strong_ref(
         clientb.send_image(
             text=response_title,
-            image=bsky_image_bytes.read(),
-            image_alt=prune_description(alt_text_limit_bsky, response_desc),
+            image=image_bytes.read(),
+            image_alt=alt_text_bluesky,
         )
     )
 
