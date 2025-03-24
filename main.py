@@ -28,21 +28,24 @@ response = requests.get(url)
 data = response.json()
 
 response_date = data["date"]
-response_title = data["title"]
-response_desc = data["explanation"]
-media_type = data["media_type"]
-media_url = data["url"]
 source_url = date_extract(response_date)
 
-alt_text_twitter = prune_description(1000, response_desc)
-alt_text_bluesky = prune_description(2000, response_desc)
+response_title = data["title"]
+media_type = data["media_type"]
+
+if media_type == "video" or media_type == "image":
+    media_url = data["url"]
 
 
 if media_type == "video":
-    twitter.post_video(response_title, media_url, source_url, alt_text_twitter)
-    bluesky.post_video(response_title, media_url, source_url, alt_text_bluesky)
+    twitter.post_video(response_title, media_url, source_url)
+    bluesky.post_video(response_title, media_url, source_url)
 
 elif media_type == "image":
+    response_desc = data["explanation"]
+    alt_text_twitter = prune_description(1000, response_desc)
+    alt_text_bluesky = prune_description(2000, response_desc)
+
     img_response = requests.get(media_url)
 
     if img_response.status_code == 200:
@@ -57,3 +60,7 @@ elif media_type == "image":
 
     else:
         print(f"Failed to fetch image. Status code: {img_response.status_code}")
+
+elif media_type == "other":
+    twitter.post_tweet(source_url)
+    bluesky.post_text(source_url)

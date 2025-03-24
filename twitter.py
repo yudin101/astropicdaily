@@ -53,3 +53,13 @@ def post_video(response_title, media_url, source_url):
     latest_tweet_id = response.data["id"]
 
     post_reply(latest_tweet_id, source_url)
+
+
+def post_tweet(source_url):
+    print("\nCreating a tweet...")
+    response = clientx.create_tweet(
+        text="Today's APOD cannot be displayed here! Please check the source."
+    )
+    latest_tweet_id = response.data["id"]
+
+    post_reply(latest_tweet_id, source_url)

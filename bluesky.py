@@ -51,3 +51,14 @@ def post_video(response_title, media_url, source_url):
     )
 
     post_reply(source_url, root_post_ref)
+
+
+def post_text(source_url):
+    print("\nCreating a post...")
+    root_post_ref = atproto.models.create_strong_ref(
+        clientb.send_post(
+            text="Today's APOD cannot be displayed here! Please check the source."
+        )
+    )
+
+    post_reply(source_url, root_post_ref)
