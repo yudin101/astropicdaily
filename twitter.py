@@ -41,7 +41,10 @@ def post_image(
     )
 
     # Creating the tweet along with the image
-    response = clientx.create_tweet(text=response_title, media_ids=[media.media_id])
+    response = clientx.create_tweet(
+        text=response_title + "\n\n #astronomy #astrophotography #apod",
+        media_ids=[media.media_id],
+    )
     latest_tweet_id = response.data["id"]
 
     post_reply(latest_tweet_id, source_url)
@@ -49,7 +52,9 @@ def post_image(
 
 def post_video(response_title, media_url, source_url):
     print("\nCreating a tweet with video URL...")
-    response = clientx.create_tweet(text=f"{response_title}\nURL: {media_url}")
+    response = clientx.create_tweet(
+        text=f"{response_title}\nURL: {media_url} \n\n #astronomy #apod"
+    )
     latest_tweet_id = response.data["id"]
 
     post_reply(latest_tweet_id, source_url)

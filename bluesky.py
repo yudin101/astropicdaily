@@ -1,4 +1,5 @@
 import atproto
+from atproto import client_utils
 import keys
 
 
@@ -11,7 +12,7 @@ clientb.login(keys.BSKY_USERNAME, keys.BSKY_PASSWORD)
 def post_reply(source_url, root_post_ref):
     print("Sending reply to the latest post...")
     clientb.send_post(
-        text=atproto.client_utils.TextBuilder()
+        text=client_utils.TextBuilder()
         .text("Source: ")
         .link(
             f"{source_url}",
@@ -31,7 +32,11 @@ def post_image(
     image_bytes.seek(0)
     root_post_ref = atproto.models.create_strong_ref(
         clientb.send_image(
-            text=response_title,
+            text=client_utils.TextBuilder()
+            .text(f"{response_title}\n\n")
+            .tag("#astronomy ", "astronomy")
+            .tag("#astrophotography ", "astrophotography")
+            .tag("#apod ", "apod"),
             image=image_bytes.read(),
             image_alt=alt_text_bluesky,
         )
@@ -44,9 +49,12 @@ def post_video(response_title, media_url, source_url):
     print("\nCreating a post with video URL...")
     root_post_ref = atproto.models.create_strong_ref(
         clientb.send_post(
-            text=atproto.client_utils.TextBuilder()
+            text=client_utils.TextBuilder()
             .text(f"{response_title}\nURL: ")
-            .link(media_url, media_url),
+            .link(media_url, media_url)
+            .text("\n\n")
+            .tag("#astronomy ", "astronomy")
+            .tag("#apod ", "apod"),
         )
     )
 
