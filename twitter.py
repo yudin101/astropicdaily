@@ -25,9 +25,7 @@ def post_reply(latest_tweet_id, source_url):
     )
 
 
-def post_image(
-    response_title, response_desc, image_bytes, source_url, alt_text_twitter
-):
+def post_image(response_title, image_bytes, source_url, alt_text_twitter):
     print("\nCreating a tweet with image...")
     # Uploading the image to the Twitter API
     image_bytes.seek(0)
