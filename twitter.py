@@ -18,7 +18,7 @@ clientx = tweepy.Client(
 
 
 def post_reply(latest_tweet_id, source_url):
-    print("Sending reply to the latest tweet...")
+    print("Twitter: Sending reply to the latest tweet...")
     clientx.create_tweet(
         text=f"Source: {source_url}",
         in_reply_to_tweet_id=latest_tweet_id,
@@ -26,7 +26,7 @@ def post_reply(latest_tweet_id, source_url):
 
 
 def post_image(response_title, image_bytes, source_url, alt_text_twitter):
-    print("\nCreating a tweet with image...")
+    print("\nTwitter: Creating a tweet with image...")
     # Uploading the image to the Twitter API
     image_bytes.seek(0)
     media = api.media_upload(filename=f"{response_title}-apod.jpg", file=image_bytes)
@@ -49,7 +49,7 @@ def post_image(response_title, image_bytes, source_url, alt_text_twitter):
 
 
 def post_video(response_title, media_url, source_url):
-    print("\nCreating a tweet with video URL...")
+    print("\nTwitter: Creating a tweet with video URL...")
     response = clientx.create_tweet(
         text=f"{response_title}\nURL: {media_url} \n\n #astronomy #apod"
     )
@@ -59,7 +59,7 @@ def post_video(response_title, media_url, source_url):
 
 
 def post_tweet(source_url):
-    print("\nCreating a tweet...")
+    print("\nTwitter: Creating a tweet...")
     response = clientx.create_tweet(
         text="Today's APOD cannot be displayed here! Please check the source."
     )
