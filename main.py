@@ -3,8 +3,8 @@ import io
 
 import keys
 
-# import twitter
-# import bluesky
+import twitter
+import bluesky
 import instagram
 
 
@@ -52,12 +52,12 @@ elif media_type == "image":
     if img_response.status_code == 200:
         image_bytes = io.BytesIO(img_response.content)
 
-        # twitter.post_image(
-        #    response_title, image_bytes, source_url, alt_text_twitter
-        # )
-        # bluesky.post_image(
-        #    response_title, image_bytes, source_url, alt_text_bluesky
-        # )
+        twitter.post_image(
+           response_title, image_bytes, source_url, alt_text_twitter
+        )
+        bluesky.post_image(
+           response_title, image_bytes, source_url, alt_text_bluesky
+        )
         instagram.post_image(response_title, image_bytes, response_desc, source_url)
 
     else:
