@@ -10,7 +10,7 @@ clientb.login(keys.BSKY_USERNAME, keys.BSKY_PASSWORD)
 
 
 def post_reply(source_url, root_post_ref):
-    print("Sending reply to the latest post...")
+    print("Bluesky: Sending reply to the latest post...")
     clientb.send_post(
         text=client_utils.TextBuilder()
         .text("Source: ")
@@ -25,9 +25,9 @@ def post_reply(source_url, root_post_ref):
 
 
 def post_image(
-    response_title, response_desc, image_bytes, source_url, alt_text_bluesky
+    response_title, image_bytes, source_url, alt_text_bluesky
 ):
-    print("\nCreating a post with image...")
+    print("\nBluesky: Creating a post with image...")
     alt_text_limit_bsky = 2000
     image_bytes.seek(0)
     root_post_ref = atproto.models.create_strong_ref(
@@ -46,7 +46,7 @@ def post_image(
 
 
 def post_video(response_title, media_url, source_url):
-    print("\nCreating a post with video URL...")
+    print("\nBluesky: Creating a post with video URL...")
     root_post_ref = atproto.models.create_strong_ref(
         clientb.send_post(
             text=client_utils.TextBuilder()
@@ -62,7 +62,7 @@ def post_video(response_title, media_url, source_url):
 
 
 def post_text(source_url):
-    print("\nCreating a post...")
+    print("\nBluesky: Creating a post...")
     root_post_ref = atproto.models.create_strong_ref(
         clientb.send_post(
             text="Today's APOD cannot be displayed here! Please check the source."
