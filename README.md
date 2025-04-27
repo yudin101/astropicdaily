@@ -1,3 +1,6 @@
+> [!NOTE]
+> This bot is currently not available on Instagram because Instagram blocks PythonAnywhere's free account's IP.
+
 # astropicdaily
 
 Bot that uploads the Astronomy Picture of the Day.
