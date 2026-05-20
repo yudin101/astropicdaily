@@ -28,7 +28,6 @@ def post_image(
     response_title, image_bytes, source_url, alt_text_bluesky
 ):
     print("\nBluesky: Creating a post with image...")
-    alt_text_limit_bsky = 2000
     image_bytes.seek(0)
     root_post_ref = atproto.models.create_strong_ref(
         clientb.send_image(
