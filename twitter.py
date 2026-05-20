@@ -25,15 +25,16 @@ def post_reply(latest_tweet_id, source_url):
     )
 
 
-def post_image(response_title, image_bytes, source_url, alt_text_twitter):
+def post_image(
+    response_title, image_bytes, source_url, alt_text_twitter
+):
     print("\nTwitter: Creating a tweet with image...")
     # Uploading the image to the Twitter API
     image_bytes.seek(0)
     media = api.media_upload(filename=f"{response_title}-apod.jpg", file=image_bytes)
 
     # Adding alt text in Twitter
-    alt_text_limit_twitter = 1000
-    media_metadata = api.create_media_metadata(
+    api.create_media_metadata(
         media_id=media.media_id,
         alt_text=alt_text_twitter,
     )
@@ -43,7 +44,7 @@ def post_image(response_title, image_bytes, source_url, alt_text_twitter):
         text=response_title + "\n\n #astronomy #astrophotography #apod",
         media_ids=[media.media_id],
     )
-    latest_tweet_id = response.data["id"]
+    latest_tweet_id = response.data["id"] # type: ignore[index]
 
     post_reply(latest_tweet_id, source_url)
 
@@ -53,7 +54,7 @@ def post_video(response_title, media_url, source_url):
     response = clientx.create_tweet(
         text=f"{response_title}\nURL: {media_url} \n\n #astronomy #apod"
     )
-    latest_tweet_id = response.data["id"]
+    latest_tweet_id = response.data["id"] # type: ignore[index]
 
     post_reply(latest_tweet_id, source_url)
 
@@ -63,6 +64,6 @@ def post_tweet(source_url):
     response = clientx.create_tweet(
         text="Today's APOD cannot be displayed here! Please check the source."
     )
-    latest_tweet_id = response.data["id"]
+    latest_tweet_id = response.data["id"] # type: ignore[index]
 
     post_reply(latest_tweet_id, source_url)
