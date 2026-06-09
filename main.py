@@ -24,8 +24,19 @@ def date_extract(date):
 
 # APOD API Fetch
 url = f"https://api.nasa.gov/planetary/apod?api_key={keys.APOD_KEY}"
-response = requests.get(url)
-data = response.json()
+
+try:
+    response = requests.get(url)
+    response.raise_for_status()
+    data = response.json()
+except requests.exceptions.HTTPError as http_err:
+    print(f"HTTP error occurred: {http_err}")
+    print(f"Response content: {response.text}")
+    exit(1)
+except requests.exceptions.JSONDecodeError:
+    print("Failed to decode JSON. The API returned non-JSON data.")
+    print(f"Raw response: {response.text}")
+    exit(1)
 
 response_date = data["date"]
 source_url = date_extract(response_date)
