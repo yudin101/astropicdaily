@@ -1,11 +1,11 @@
-import requests
 import io
 
-import keys
+import requests
 
 # import twitter
 import bluesky
 import instagram
+import keys
 
 
 def prune_description(limit, alt_text):
