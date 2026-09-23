@@ -3,6 +3,12 @@ Bot that uploads the Astronomy Picture of the Day.
 
 Follow astropicdaily on: [X (Twitter)](https://x.com/astropicdaily) and [Bluesky](https://bsky.app/profile/astropicdaily.bsky.social)
 
+> [!NOTE]
+> **astropicdaily is no longer active on Twitter!**
+>
+> Twitter changed their policies and now you have pay for the API.
+> And I don't have money. Still active on [Bluesky](https://bsky.app/profile/astropicdaily.bsky.social), though.
+
 ## Run Locally
 
 **Clone the project**
