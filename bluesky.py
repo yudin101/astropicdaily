@@ -16,7 +16,7 @@ def post_reply(source_url, root_post_ref):
         .text("Source: ")
         .link(
             f"{source_url}",
-            f"https://{source_url}",
+            f"{source_url}",
         ),
         reply_to=atproto.models.AppBskyFeedPost.ReplyRef(
             parent=root_post_ref, root=root_post_ref
